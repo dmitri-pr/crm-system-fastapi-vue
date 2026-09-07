@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+venv/
+.env
+*.db
+*.sqlite
+*.sqlite3
+media/
+crm.db
+
+# Node
+node_modules/
+dist/
+.npm/
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+
+# Docs
+~$*.docx
