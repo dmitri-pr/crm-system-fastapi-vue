@@ -7,3 +7,4 @@ media/*
 !media/.gitkeep
 alembic/versions/*.py
 !alembic/versions/.gitkeep
+corrections.md

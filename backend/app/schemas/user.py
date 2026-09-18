@@ -1,13 +1,15 @@
-from pydantic import BaseModel, EmailStr, ConfigDict, Field, field_validator
+from pydantic import BaseModel, EmailStr, ConfigDict, Field
 from datetime import datetime
 from typing import Optional
+
+from app.models.user import UserRole
 
 
 class UserBase(BaseModel):
     username: str = Field(min_length=3, max_length=150, pattern=r"^[a-zA-Z0-9_\-]+$")
     email: EmailStr
     full_name: Optional[str] = Field(default=None, max_length=255)
-    role: str = Field(default="manager", pattern=r"^(admin|operator|marketer|manager)$")
+    role: UserRole = Field(default=UserRole.manager)
 
 
 class UserCreate(UserBase):
@@ -19,7 +21,7 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     full_name: Optional[str] = Field(default=None, max_length=255)
-    role: Optional[str] = Field(default=None, pattern=r"^(admin|operator|marketer|manager)$")
+    role: Optional[UserRole] = Field(default=None)
     is_active: Optional[bool] = None
     password: Optional[str] = Field(default=None, min_length=8, max_length=128)
 

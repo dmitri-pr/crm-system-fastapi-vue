@@ -7,7 +7,7 @@ from typing import List
 from app.core.database import get_session
 from app.core.dependencies import get_current_user, require_roles
 from app.core.security import get_password_hash
-from app.models.user import User
+from app.models.user import User, UserRole
 from app.schemas.user import UserOut, UserCreate, UserUpdate
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -34,17 +34,16 @@ async def create_user(
     result = await session.execute(select(User).where((User.username == payload.username) | (User.email == payload.email)))
     if result.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Пользователь с таким username или email уже существует")
-    if payload.role not in ("admin", "operator", "marketer", "manager"):
-        raise HTTPException(status_code=400, detail="Неверная роль")
-    if payload.is_superuser and payload.role != "admin":
+    # валидация role теперь выполняется Pydantic через UserRole Enum
+    if payload.is_superuser and payload.role != UserRole.admin:
         raise HTTPException(status_code=400, detail="Только admin может быть superuser")
     user = User(
         username=payload.username,
         email=payload.email,
         full_name=payload.full_name,
-        role=payload.role,
+        role=payload.role.value,
         is_active=payload.is_active,
-        is_superuser=payload.is_superuser if payload.role == "admin" else False,
+        is_superuser=payload.is_superuser if payload.role == UserRole.admin else False,
         hashed_password=get_password_hash(payload.password),
     )
     session.add(user)
@@ -63,7 +62,8 @@ async def get_user(
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
-    if current_user.id != user_id and str(current_user.role) != "admin" and not current_user.is_superuser:
+    _role = current_user.role.value if hasattr(current_user.role, "value") else current_user.role
+    if current_user.id != user_id and _role != "admin" and not current_user.is_superuser:
         raise HTTPException(status_code=403, detail="Недостаточно прав")
     result = await session.execute(select(User).where(User.id == user_id))
     user = result.scalar_one_or_none()
@@ -91,11 +91,10 @@ async def update_user(
     if payload.full_name is not None:
         user.full_name = payload.full_name
     if payload.role is not None:
-        if payload.role not in ("admin", "operator", "marketer", "manager"):
-            raise HTTPException(status_code=400, detail="Неверная роль")
-        user.role = payload.role
+        # валидация role уже выполнена Pydantic (UserRole Enum)
+        user.role = payload.role.value
         # Синхронизируем is_superuser с ролью
-        if payload.role == "admin":
+        if payload.role == UserRole.admin:
             # оставляем как есть, но если ранее не был superuser, можно повысить
             pass
         else:

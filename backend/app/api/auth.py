@@ -25,8 +25,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), session: Async
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Неверное имя пользователя или пароль")
     if not user.is_active:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Пользователь неактивен")
-    # role может быть enum, приводим к строке
-    role_val = str(user.role) if not isinstance(user.role, str) else user.role
+    # role может быть enum (UserRole), приводим к строковому значению
+    role_val = user.role.value if hasattr(user.role, "value") else user.role
     access_token = create_access_token(data={"sub": user.username, "role": role_val})
     return {"access_token": access_token, "token_type": "bearer"}
 
