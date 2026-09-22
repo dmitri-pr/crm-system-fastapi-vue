@@ -34,9 +34,3 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), session: Async
 @router.get("/me", response_model=UserOut)
 async def get_me(current_user: User = Depends(get_current_user)):
     return current_user
-
-
-@router.post("/register", response_model=UserOut, status_code=201)
-async def register_public():
-    # публичная регистрация отключена - только админ создает пользователей
-    raise HTTPException(status_code=403, detail="Регистрация только через администратора")
