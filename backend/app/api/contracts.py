@@ -6,7 +6,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.exc import IntegrityError
-from typing import List, Optional
 from datetime import date, datetime
 from decimal import Decimal
 
@@ -28,7 +27,7 @@ ALLOWED_EXTS = {".pdf", ".docx", ".doc", ".jpg", ".jpeg", ".png", ".txt"}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB
 
 
-def _validate_contract_dates(start: Optional[date], end: Optional[date], existing_start=None, existing_end=None):
+def _validate_contract_dates(start: date | None, end: date | None, existing_start=None, existing_end=None):
     s = start if start is not None else existing_start
     e = end if end is not None else existing_end
     if s and e and s > e:
@@ -73,7 +72,7 @@ async def _save_upload_file(upload: UploadFile) -> str:
     return f"/media/contracts/{filename}"
 
 
-def _remove_file(doc_path: Optional[str]):
+def _remove_file(doc_path: str | None):
     if not doc_path:
         return
     try:
@@ -106,7 +105,7 @@ def to_out(contract: Contract) -> ContractOut:
     )
 
 
-@router.get("", response_model=List[ContractOut])
+@router.get("", response_model=list[ContractOut])
 async def list_contracts(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
@@ -125,7 +124,7 @@ async def create_contract(
     start_date: date = Form(...),
     end_date: date = Form(...),
     cost: float = Form(...),
-    document: Optional[UploadFile] = File(None),
+    document: UploadFile | None = File(None),
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(require_permissions(["contracts:create"])),
 ):
@@ -222,12 +221,12 @@ async def get_contract(
 @router.put("/{contract_id}", response_model=ContractOut)
 async def update_contract(
     contract_id: int,
-    name: Optional[str] = Form(None),
-    product_id: Optional[int] = Form(None),
-    start_date: Optional[date] = Form(None),
-    end_date: Optional[date] = Form(None),
-    cost: Optional[float] = Form(None),
-    document: Optional[UploadFile] = File(None),
+    name: str | None = Form(None),
+    product_id: int | None = Form(None),
+    start_date: date | None = Form(None),
+    end_date: date | None = Form(None),
+    cost: float | None = Form(None),
+    document: UploadFile | None = File(None),
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(require_permissions(["contracts:update"])),
 ):

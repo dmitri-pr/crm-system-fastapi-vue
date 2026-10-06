@@ -1,5 +1,3 @@
-from typing import List, Optional
-
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -66,7 +64,7 @@ def has_permission(user: User, permission: str) -> bool:
     return permission in perms or "*" in perms
 
 
-def require_permissions(permissions: List[str]):
+def require_permissions(permissions: list[str]):
     async def checker(current_user: User = Depends(get_current_user)) -> User:
         if current_user.is_superuser or current_user.role == "admin":
             return current_user
@@ -78,7 +76,7 @@ def require_permissions(permissions: List[str]):
     return checker
 
 
-def require_roles(roles: List[str]):
+def require_roles(roles: list[str]):
     async def checker(current_user: User = Depends(get_current_user)) -> User:
         if current_user.is_superuser or current_user.role == "admin":
             return current_user

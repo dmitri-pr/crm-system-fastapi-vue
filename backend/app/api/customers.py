@@ -3,7 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.exc import IntegrityError
-from typing import List
 
 from app.core.database import get_session
 from app.core.dependencies import get_current_user, require_permissions
@@ -59,7 +58,7 @@ def to_out(cust: Customer) -> CustomerOut:
     )
 
 
-@router.get("", response_model=List[CustomerOut])
+@router.get("", response_model=list[CustomerOut])
 async def list_customers(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
@@ -115,7 +114,7 @@ async def create_customer(
     return to_out(cust)
 
 
-@router.get("/available/leads", response_model=List[dict])
+@router.get("/available/leads", response_model=list[dict])
 async def available_leads(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),

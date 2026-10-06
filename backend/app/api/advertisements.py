@@ -3,7 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 from sqlalchemy.exc import IntegrityError
-from typing import List
 
 from app.core.database import get_session
 from app.core.dependencies import get_current_user, require_permissions
@@ -31,7 +30,7 @@ def to_out(ad: Advertisement) -> AdvertisementOut:
     )
 
 
-@router.get("", response_model=List[AdvertisementOut])
+@router.get("", response_model=list[AdvertisementOut])
 async def list_ads(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
@@ -43,7 +42,7 @@ async def list_ads(
     return [to_out(a) for a in ads]
 
 
-@router.get("/statistic", response_model=List[AdvertisementStatsOut])
+@router.get("/statistic", response_model=list[AdvertisementStatsOut])
 async def ads_statistic(
     session: AsyncSession = Depends(get_session),
     current_user: User = Depends(require_permissions(["stats:read"])),

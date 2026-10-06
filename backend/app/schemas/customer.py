@@ -1,6 +1,5 @@
 from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime
-from typing import Optional
 
 from app.schemas.lead import LeadOut
 from app.schemas.contract import ContractOut
@@ -16,7 +15,7 @@ class CustomerCreate(CustomerBase):
 
 
 class CustomerUpdate(BaseModel):
-    contract_id: Optional[int] = Field(default=None, ge=1)
+    contract_id: int | None = Field(default=None, ge=1)
 
 
 class CustomerOut(BaseModel):
@@ -25,8 +24,8 @@ class CustomerOut(BaseModel):
     contract_id: int
     created_at: datetime
     updated_at: datetime
-    lead: Optional[LeadOut] = None
-    contract: Optional[ContractOut] = None
+    lead: LeadOut | None = None
+    contract: ContractOut | None = None
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -35,9 +34,9 @@ class CustomerListOut(BaseModel):
     lead_id: int
     contract_id: int
     created_at: datetime
-    lead_first_name: Optional[str] = None
-    lead_last_name: Optional[str] = None
-    lead_email: Optional[str] = None
-    lead_phone: Optional[str] = None
-    contract_name: Optional[str] = None
+    lead_first_name: str | None = None
+    lead_last_name: str | None = None
+    lead_email: str | None = None
+    lead_phone: str | None = None
+    contract_name: str | None = None
     model_config = ConfigDict(from_attributes=True)

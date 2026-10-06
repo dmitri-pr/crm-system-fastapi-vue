@@ -1,6 +1,5 @@
 from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime
-from typing import Optional
 from decimal import Decimal
 
 
@@ -16,10 +15,10 @@ class AdvertisementCreate(AdvertisementBase):
 
 
 class AdvertisementUpdate(BaseModel):
-    name: Optional[str] = Field(default=None, min_length=1, max_length=255)
-    product_id: Optional[int] = Field(default=None, ge=1)
-    promotion_channel: Optional[str] = Field(default=None, min_length=1, max_length=255)
-    budget: Optional[Decimal] = Field(default=None, max_digits=10, decimal_places=2, ge=0)
+    name: str | None = Field(default=None, min_length=1, max_length=255)
+    product_id: int | None = Field(default=None, ge=1)
+    promotion_channel: str | None = Field(default=None, min_length=1, max_length=255)
+    budget: Decimal | None = Field(default=None, max_digits=10, decimal_places=2, ge=0)
 
 
 class AdvertisementOut(BaseModel):
@@ -30,22 +29,22 @@ class AdvertisementOut(BaseModel):
     budget: float
     created_at: datetime
     updated_at: datetime
-    product_name: Optional[str] = None
+    product_name: str | None = None
     model_config = ConfigDict(from_attributes=True)
 
 
 class AdvertisementDetail(AdvertisementOut):
-    leads_count: Optional[int] = None
-    customers_count: Optional[int] = None
-    profit: Optional[float] = None
+    leads_count: int | None = None
+    customers_count: int | None = None
+    profit: float | None = None
 
 
 class AdvertisementStatsOut(BaseModel):
     id: int
     name: str
-    product_name: Optional[str] = None
+    product_name: str | None = None
     budget: float
     leads_count: int
     customers_count: int
-    profit: Optional[float] = None
+    profit: float | None = None
     model_config = ConfigDict(from_attributes=True)

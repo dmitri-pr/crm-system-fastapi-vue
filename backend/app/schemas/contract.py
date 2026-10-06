@@ -1,6 +1,5 @@
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from datetime import date, datetime
-from typing import Optional
 from decimal import Decimal
 
 
@@ -23,11 +22,11 @@ class ContractCreate(ContractBase):
 
 
 class ContractUpdate(BaseModel):
-    name: Optional[str] = Field(default=None, min_length=1, max_length=255)
-    product_id: Optional[int] = Field(default=None, ge=1)
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
-    cost: Optional[Decimal] = Field(default=None, max_digits=10, decimal_places=2, ge=0)
+    name: str | None = Field(default=None, min_length=1, max_length=255)
+    product_id: int | None = Field(default=None, ge=1)
+    start_date: date | None = None
+    end_date: date | None = None
+    cost: Decimal | None = Field(default=None, max_digits=10, decimal_places=2, ge=0)
 
     @model_validator(mode="after")
     def check_dates(self):
@@ -43,8 +42,8 @@ class ContractOut(BaseModel):
     start_date: date
     end_date: date
     cost: float
-    document: Optional[str] = None
+    document: str | None = None
     created_at: datetime
     updated_at: datetime
-    product_name: Optional[str] = None
+    product_name: str | None = None
     model_config = ConfigDict(from_attributes=True)

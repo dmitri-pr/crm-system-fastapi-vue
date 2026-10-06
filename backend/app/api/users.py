@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
-from typing import List
 
 from app.core.database import get_session
 from app.core.dependencies import get_current_user, require_roles
@@ -13,7 +12,7 @@ from app.schemas.user import UserOut, UserCreate, UserUpdate
 router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.get("", response_model=List[UserOut])
+@router.get("", response_model=list[UserOut])
 async def list_users(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
