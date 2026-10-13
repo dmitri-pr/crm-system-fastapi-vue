@@ -19,6 +19,8 @@ class CustomerUpdate(BaseModel):
 
 
 class CustomerOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     lead_id: int
     contract_id: int
@@ -26,10 +28,11 @@ class CustomerOut(BaseModel):
     updated_at: datetime
     lead: LeadOut | None = None
     contract: ContractOut | None = None
-    model_config = ConfigDict(from_attributes=True)
 
 
 class CustomerListOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     lead_id: int
     contract_id: int
@@ -39,4 +42,3 @@ class CustomerListOut(BaseModel):
     lead_email: str | None = None
     lead_phone: str | None = None
     contract_name: str | None = None
-    model_config = ConfigDict(from_attributes=True)

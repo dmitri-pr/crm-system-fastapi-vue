@@ -25,9 +25,10 @@ class LeadUpdate(BaseModel):
 
 
 class LeadOut(LeadBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     created_at: datetime
     updated_at: datetime
     advertisement_name: str | None = None
     is_converted: bool = False
-    model_config = ConfigDict(from_attributes=True)

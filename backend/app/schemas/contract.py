@@ -36,6 +36,8 @@ class ContractUpdate(BaseModel):
 
 
 class ContractOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     product_id: int
@@ -46,4 +48,3 @@ class ContractOut(BaseModel):
     created_at: datetime
     updated_at: datetime
     product_name: str | None = None
-    model_config = ConfigDict(from_attributes=True)

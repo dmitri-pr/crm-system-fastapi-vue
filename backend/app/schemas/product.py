@@ -20,10 +20,11 @@ class ProductUpdate(BaseModel):
 
 
 class ProductOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     description: str | None = None
     cost: float
     created_at: datetime
     updated_at: datetime
-    model_config = ConfigDict(from_attributes=True)

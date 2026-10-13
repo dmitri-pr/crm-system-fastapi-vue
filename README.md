@@ -1,6 +1,6 @@
 # CRM FastAPI Vue
 
-CRM-система (FastAPI async + Vue 3) — переписана с Django по ТЗ Skillbox.
+CRM-система (FastAPI async + Vue 3) - переписана с Django по ТЗ Skillbox.
 
 ## Быстрый старт
 
@@ -24,7 +24,7 @@ npm run dev
 # логин: admin / admin123
 ```
 
-Подробнее — см. `instructions.docx` в корне проекта и в `crm_fastapi_vue/`.
+Подробнее - см. `instructions.docx` в корне проекта и в `crm_fastapi_vue/`.
 
 ## Структура
 ```
@@ -40,7 +40,7 @@ crm_fastapi_vue/
 - manager1 / manager123 (контракты, клиенты)
 
 ## API
-- `POST /api/auth/login` — JWT
+- `POST /api/auth/login` - JWT
 - CRUD: `/api/products`, `/api/ads`, `/api/leads`, `/api/contracts`, `/api/customers`, `/api/users`
 - Статистика: `/api/ads/statistic`, `/api/stats/dashboard`
 - Swagger: http://127.0.0.1:8000/docs

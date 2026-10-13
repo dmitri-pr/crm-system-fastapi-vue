@@ -22,6 +22,8 @@ class AdvertisementUpdate(BaseModel):
 
 
 class AdvertisementOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     product_id: int
@@ -30,7 +32,6 @@ class AdvertisementOut(BaseModel):
     created_at: datetime
     updated_at: datetime
     product_name: str | None = None
-    model_config = ConfigDict(from_attributes=True)
 
 
 class AdvertisementDetail(AdvertisementOut):
@@ -40,6 +41,8 @@ class AdvertisementDetail(AdvertisementOut):
 
 
 class AdvertisementStatsOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     product_name: str | None = None
@@ -47,4 +50,3 @@ class AdvertisementStatsOut(BaseModel):
     leads_count: int
     customers_count: int
     profit: float | None = None
-    model_config = ConfigDict(from_attributes=True)
