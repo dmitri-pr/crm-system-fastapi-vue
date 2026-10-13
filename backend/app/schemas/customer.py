@@ -15,7 +15,11 @@ class CustomerCreate(CustomerBase):
 
 
 class CustomerUpdate(BaseModel):
-    contract_id: int | None = Field(default=None, ge=1)
+    contract_id: int | None = Field(
+        default=None,
+        ge=1,
+        description="Новый ID договора",
+    )
 
 
 class CustomerOut(BaseModel):

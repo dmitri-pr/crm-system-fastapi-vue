@@ -5,10 +5,23 @@ from app.models.user import UserRole
 
 
 class UserBase(BaseModel):
-    username: str = Field(min_length=3, max_length=150, pattern=r"^[a-zA-Z0-9_\-]+$")
-    email: EmailStr
+    username: str = Field(
+        min_length=3,
+        max_length=150,
+        pattern=r"^[a-zA-Z0-9_\-]+$",
+        description="Уникальный логин: только латиница, цифры, '_' и '-'. Пробелы по краям обрезаются",
+        examples=["john_doe"],
+    )
+    email: EmailStr = Field(
+        description="Email; приводится к нижнему регистру",
+        examples=["john@mail.com"],
+    )
     full_name: str | None = Field(default=None, max_length=255)
-    role: UserRole = Field(default=UserRole.manager)
+    role: UserRole = Field(
+        default=UserRole.manager,
+        description="Роль: admin — полный доступ, operator — лиды, marketer — товары и реклама, manager — договоры и клиенты",
+        examples=["manager"],
+    )
 
     @field_validator("username", "email", "full_name", mode="before")
     @classmethod
@@ -22,17 +35,42 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: str = Field(min_length=8, max_length=128)
-    is_active: bool = True
-    is_superuser: bool = False
+    password: str = Field(
+        min_length=8,
+        max_length=128,
+        description="Пароль минимум 8 символов; пробелы по краям не обрезаются — вводите одинаково при регистрации и входе",
+        examples=["Str0ngPass!"],
+    )
+    is_active: bool = Field(
+        default=True,
+        description="false — вход пользователя запрещён",
+    )
+    is_superuser: bool = Field(
+        default=False,
+        description="true допустим только вместе с ролью admin",
+    )
 
 
 class UserUpdate(BaseModel):
-    email: EmailStr | None = None
+    email: EmailStr | None = Field(
+        default=None,
+        description="Новый email; приводится к нижнему регистру",
+    )
     full_name: str | None = Field(default=None, max_length=255)
-    role: UserRole | None = Field(default=None)
-    is_active: bool | None = None
-    password: str | None = Field(default=None, min_length=8, max_length=128)
+    role: UserRole | None = Field(
+        default=None,
+        description="Новая роль пользователя",
+    )
+    is_active: bool | None = Field(
+        default=None,
+        description="false — вход пользователя запрещён",
+    )
+    password: str | None = Field(
+        default=None,
+        min_length=8,
+        max_length=128,
+        description="Новый пароль минимум 8 символов; пробелы по краям не обрезаются",
+    )
 
     @field_validator("email", "full_name", mode="before")
     @classmethod
